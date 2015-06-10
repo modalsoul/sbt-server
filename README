@@ -1,5 +1,42 @@
-A sample for the Typesafe Stack (http://typesafe.com/stack).
+sbt-server
+============
 
-Scala sample project using Scala and SBT.
+sbt-server is a sbt plugin which provide simple http service.
 
-To run and test it use SBT invoke: 'sbt run'
+Requirements
+------------
+
+* sbt
+
+Setup
+-----
+
+### Using Plugin on GitHub
+
+Add lines to your `project/plugins.sbt`
+
+```scala
+lazy val root = project.in(file(".")).dependsOn(githubRepo)
+
+lazy val githubRepo = uri("git://github.com/modalsoul/sbt-server.git")
+```
+
+Usage
+-----
+### server task
+
+    > server
+
+Default http port number is 9000.
+
+You can use 
+
+`http://localhost:9000/`
+
+
+For example use 9001 port.
+
+Use ```-p``` parameter
+
+    > server -p 9001
+
