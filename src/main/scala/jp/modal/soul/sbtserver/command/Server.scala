@@ -1,10 +1,9 @@
 package jp.modal.soul.sbtserver.command
 
-import java.io.{BufferedReader, FileInputStream, InputStreamReader}
 import java.net.InetSocketAddress
 
 import com.sun.net.httpserver._
-import jp.modal.soul.sbtserver.util.Loan
+import jp.modal.soul.sbtserver.ReadFile
 
 /**
  * Created by imae on 2015/06/09.
@@ -23,21 +22,9 @@ class ServerHttpHandler extends HttpHandler {
   
   override def handle(he: HttpExchange): Unit = {
     val (code, bytes) = 
-      try { 
-        val uri = s".${he.getRequestURI.getPath}"
-        val builder = new StringBuilder
-        for {
-          in <- Loan(new FileInputStream(uri))
-          reader <- Loan(new InputStreamReader(in, CHAR_SET))
-          buffer <- Loan(new BufferedReader(reader))
-        } {
-          var line = buffer.readLine()
-          while(line != null) {
-            builder.append(line)
-            line = buffer.readLine()
-          }
-        }
-        (200, builder.toString().getBytes(CHAR_SET))
+      try {
+        val src = ReadFile.src(s".${he.getRequestURI.getPath}")
+        (200, src.getBytes(CHAR_SET))
       } catch {
         case e:Exception =>
           e.printStackTrace()
