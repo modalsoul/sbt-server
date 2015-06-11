@@ -6,7 +6,7 @@ sbt-server is a sbt plugin which provide simple http service.
 Requirements
 ------------
 
-* sbt
+* sbt 0.13.x
 
 Setup
 -----
