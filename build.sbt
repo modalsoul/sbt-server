@@ -13,7 +13,9 @@ val testDependencies = Seq(
   "org.scalacheck" %% "scalacheck" % "1.12.1" % "test" withSources() withJavadoc()
 )
 
-libraryDependencies ++= testDependencies
+libraryDependencies ++= Seq(
+  "com.twitter" %% "finagle-http" % "6.25.0"
+)++testDependencies
 
 initialCommands := "import jp.modal.soul.sbtserver.SbtServerPlugin._"
 
