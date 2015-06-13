@@ -10,7 +10,8 @@ import scala.util.Try
  * Created by imae on 2015/06/09.
  */
 object SbtServerPlugin extends Plugin {
-  private[this] final val PORT = "-p"
+  private[this] final val PORT = """-p|-port"""
+  private[this] final val BASE_DIR = """-b|-base"""
 
   override lazy val settings = Seq(
     commands ++= Seq(
@@ -25,8 +26,10 @@ object SbtServerPlugin extends Plugin {
   }
 
   lazy val server = Command.args("server", "<args>") { (state, args) =>
-    val port = args.zipWithIndex.find(_._1.trim == PORT).flatMap{ case (p:String, i:Int) => Try(args(i+1).toInt).toOption }
-    FinagleServer(port)
+    val withIndex = args.zipWithIndex
+    val port = withIndex.find(_._1.trim.matches(PORT)).flatMap{ case (p:String, i:Int) => Try(args(i+1).toInt).toOption }
+    val baseDir = withIndex.find(_._1.trim.matches(BASE_DIR)).flatMap{ case (p:String, i:Int) => Try(args(i+1)).toOption }
+    FinagleServer(port, baseDir)
     state
   }
 }

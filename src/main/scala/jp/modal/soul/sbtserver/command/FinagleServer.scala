@@ -10,14 +10,14 @@ import org.jboss.netty.handler.codec.http.{DefaultHttpResponse, HttpRequest, Htt
 /**
  * Created by imae on 2015/06/11.
  */
-case class FinagleServer(port:Option[Int]) {
+case class FinagleServer(port:Option[Int], baseDir:Option[String]) {
   private[this] def requestLog(implicit req:HttpRequest) = s"${req.getProtocolVersion} ${req.getMethod} ${req.getUri}"
   
   val service = new Service[HttpRequest, HttpResponse] {
     override def apply(request: HttpRequest): Future[HttpResponse] = {
       implicit val req = request
       println(requestLog)
-      val src = ReadFile.src(s".${request.getUri}")
+      val src = ReadFile.src(s"${baseDir.getOrElse(".")}${request.getUri}")
       val response = new DefaultHttpResponse(request.getProtocolVersion, 
         if(src.isEmpty) HttpResponseStatus.NOT_FOUND else HttpResponseStatus.OK)
       response.setContent(copiedBuffer(src, Utf8))
