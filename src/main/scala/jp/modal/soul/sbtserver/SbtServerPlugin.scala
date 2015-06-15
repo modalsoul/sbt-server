@@ -1,9 +1,11 @@
 package jp.modal.soul.sbtserver
 
-import jp.modal.soul.sbtserver.command.FinagleServer
+import jp.modal.soul.sbtserver.command.server.FinagleServer
 import sbt.Keys._
 import sbt._
 
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 import scala.util.Try
 
 /**
@@ -29,7 +31,8 @@ object SbtServerPlugin extends Plugin {
     val withIndex = args.zipWithIndex
     val port = withIndex.find(_._1.trim.matches(PORT)).flatMap{ case (p:String, i:Int) => Try(args(i+1).toInt).toOption }
     val baseDir = withIndex.find(_._1.trim.matches(BASE_DIR)).flatMap{ case (p:String, i:Int) => Try(args(i+1)).toOption }
-    FinagleServer(port, baseDir)
+    Future(FinagleServer(port, baseDir))
     state
   }
+
 }

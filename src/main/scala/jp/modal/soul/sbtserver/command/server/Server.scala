@@ -1,4 +1,4 @@
-package jp.modal.soul.sbtserver.command
+package jp.modal.soul.sbtserver.command.server
 
 import java.net.InetSocketAddress
 
