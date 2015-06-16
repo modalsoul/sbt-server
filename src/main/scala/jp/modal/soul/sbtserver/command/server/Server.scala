@@ -3,7 +3,7 @@ package jp.modal.soul.sbtserver.command.server
 import java.net.InetSocketAddress
 
 import com.sun.net.httpserver._
-import jp.modal.soul.sbtserver.ReadFile
+import jp.modal.soul.sbtserver.Resource
 
 /**
  * Created by imae on 2015/06/09.
@@ -23,7 +23,7 @@ class ServerHttpHandler extends HttpHandler {
   override def handle(he: HttpExchange): Unit = {
     val (code, bytes) = 
       try {
-        val src = ReadFile.src(s".${he.getRequestURI.getPath}")
+        val src = Resource.get(s".${he.getRequestURI.getPath}")
         (200, src.getBytes(CHAR_SET))
       } catch {
         case e:Exception =>

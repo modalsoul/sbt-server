@@ -1,9 +1,11 @@
 package jp.modal.soul.sbtserver
 
 import jp.modal.soul.sbtserver.command.server.FinagleServer
+import jp.modal.soul.sbtserver.model.entity.Mock
 import sbt.Keys._
 import sbt._
 
+import scala.collection.mutable.Map
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.Try
@@ -15,10 +17,13 @@ object SbtServerPlugin extends Plugin {
   private[this] final val PORT = """-p|-port"""
   private[this] final val BASE_DIR = """-b|-base"""
 
+  var registered = Map.empty[String, String]
+
   override lazy val settings = Seq(
     commands ++= Seq(
       sample,
-      server
+      server,
+      mock
     )
   )
 
@@ -35,4 +40,13 @@ object SbtServerPlugin extends Plugin {
     state
   }
 
+  lazy val mock = Command.args("mock", "<args>") { (state, args) =>
+    val keyValue = Try((args.head, args.tail.head)).toOption
+
+    keyValue.foreach{case (k:String, v:String) =>
+      val mock = Mock(k,v)
+      registered(mock.path) = mock.resource
+    }
+    state
+  }
 }
