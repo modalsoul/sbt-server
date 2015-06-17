@@ -6,7 +6,8 @@ import com.twitter.util.Await
 /**
  * Created by imae on 2015/06/11.
  */
-case class FinagleServer(assignedPort:Option[Int], assignedBaseDir:Option[String]) extends ServerConfig with RequestLog {
-  val service = new FinagleService(path)
-  Await.ready(Http.serve(port, service))
+case class FinagleServer(assignedPort:Option[Int]) extends RequestLog {
+  private[this] final val DEFAULT_PORT = 9000
+  val port = s":${assignedPort.getOrElse(DEFAULT_PORT).toString}"
+  Await.ready(Http.serve(port, new FinagleService))
 }

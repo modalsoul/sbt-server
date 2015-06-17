@@ -17,8 +17,6 @@ object SbtServerPlugin extends Plugin {
   private[this] final val PORT = """-p|-port"""
   private[this] final val BASE_DIR = """-b|-base"""
 
-  var registered = Map.empty[String, String]
-
   override lazy val settings = Seq(
     commands ++= Seq(
       sample,
@@ -32,21 +30,18 @@ object SbtServerPlugin extends Plugin {
     state
   }
 
-  lazy val server = Command.args("server", "<args>") { (state, args) =>
+  lazy val server = Command.args("server", "<-p|-path PORT_NUMBER> <-b|-base BASE_DIR>") { (state, args) =>
     val withIndex = args.zipWithIndex
     val port = withIndex.find(_._1.trim.matches(PORT)).flatMap{ case (p:String, i:Int) => Try(args(i+1).toInt).toOption }
     val baseDir = withIndex.find(_._1.trim.matches(BASE_DIR)).flatMap{ case (p:String, i:Int) => Try(args(i+1)).toOption }
-    Future(FinagleServer(port, baseDir))
+    baseDir.foreach(Resource.setBaseDir)
+    Future(FinagleServer(port))
     state
   }
 
-  lazy val mock = Command.args("mock", "<args>") { (state, args) =>
+  lazy val mock = Command.args("mock", "<-m|-mock URI VALUE|RESOURCE_PATH>") { (state, args) =>
     val keyValue = Try((args.head, args.tail.head)).toOption
-
-    keyValue.foreach{case (k:String, v:String) =>
-      val mock = Mock(k,v)
-      registered(mock.path) = mock.resource
-    }
+    keyValue.foreach{case (k:String, v:String) => Resource.addMock(Mock(k,v))}
     state
   }
 }
