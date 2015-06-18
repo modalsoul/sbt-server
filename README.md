@@ -65,7 +65,7 @@ For example, ```mock /api/foobar.json {"foo":"bar"}```
 
 return 
 
-```
+```json
 {
     "foo" : "bar"
 }
@@ -85,7 +85,7 @@ and use mock command
 
 return
 
-```
+```json
 [
     {
         "name": "John Smith", 

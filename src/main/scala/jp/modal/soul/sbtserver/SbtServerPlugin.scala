@@ -40,8 +40,9 @@ object SbtServerPlugin extends Plugin {
   }
 
   lazy val mock = Command.args("mock", "<-m|-mock URI VALUE|RESOURCE_PATH>") { (state, args) =>
-    val keyValue = Try((args.head, args.tail.head)).toOption
+    val keyValue = Try((args.head, args.tail.mkString(" "))).toOption
     keyValue.foreach{case (k:String, v:String) => Resource.addMock(Mock(k,v))}
+    println(s"[SUCCESS]added mock ${args.head} to ${args.tail.mkString(" ")}")
     state
   }
 }
