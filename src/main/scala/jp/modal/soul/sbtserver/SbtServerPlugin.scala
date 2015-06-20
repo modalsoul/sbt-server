@@ -46,15 +46,14 @@ object SbtServerPlugin extends Plugin {
   lazy val mock = Command.args("mock", "<-a|-add> <URI> <VALUE|RESOURCE_PATH>") { (state, args) =>
     args.head match {
       case a if a.matches(ADD) =>
-        val keyValue = Try((args.head, args.tail.mkString(" "))).toOption
+        val keyValue = Try((args.tail.head, args.tail.tail.mkString(" "))).toOption
         keyValue.foreach{case (k:String, v:String) => Resource.addMock(Mock(k,v))}
         println(s"[SUCCESS]added mock ${args.head} to ${args.tail.mkString(" ")}")
       case a if a.matches(LIST) =>
-        Resource.mockList.foreach(m => println(m.toString()))
+        Resource.mockList.foreach(m => println(m._2.toString))
+      case _ =>
+        println("[ERROR]Illegal command format.\nusage:\nmock <-a|-add> <URI> <VALUE|RESOURCE_PATH>")
     }
-//    val keyValue = Try((args.head, args.tail.mkString(" "))).toOption
-//    keyValue.foreach{case (k:String, v:String) => Resource.addMock(Mock(k,v))}
-//    println(s"[SUCCESS]added mock ${args.head} to ${args.tail.mkString(" ")}")
     state
   }
 }

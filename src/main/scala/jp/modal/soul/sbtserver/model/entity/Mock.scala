@@ -11,5 +11,5 @@ import scala.util.Try
  */
 case class Mock(path:String, src:String) {
   def resource = Try(new File(src)).toOption.filter(_.isFile).fold(src){f => readFile(src)}
-  override def toString = s"$path $src"
+  override def toString = s"$path : $src"
 }
