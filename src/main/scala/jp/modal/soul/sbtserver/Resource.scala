@@ -11,10 +11,11 @@ import scala.collection.mutable.{Map => MutableMap}
 object Resource {
   private[this] final val DEFAULT_BASE_DIR = "."
   private[this] var baseDir = DEFAULT_BASE_DIR
-  private[this] val registered = MutableMap.empty[String, Mock]
+  private[this] val mocks = MutableMap.empty[String, Mock]
   private[this] final val path = (target:String) => if(target.startsWith("./")) target else s"./$target"
 
   def setBaseDir(arg:String): Unit = baseDir = arg
-  def addMock(mock:Mock):Unit = registered(mock.path) = mock
-  def get(target:String) = registered.get(target).fold(readFile(path(target)))(_.resource)
+  def addMock(mock:Mock):Unit = mocks(mock.path) = mock
+  def get(target:String) = mocks.get(target).fold(readFile(path(target)))(_.resource)
+  def mockList = mocks.toList.sortWith((m1,m2) => m1._1 > m2._1)
 }

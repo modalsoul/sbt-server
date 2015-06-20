@@ -17,6 +17,8 @@ import scala.util.Try
 object SbtServerPlugin extends Plugin {
   private[this] final val PORT = """-p|-port"""
   private[this] final val BASE_DIR = """-b|-base"""
+  private[this] final val ADD = """-a|-add"""
+  private[this] final val LIST = """-l|-list"""
 
   override lazy val settings = Seq(
     commands ++= Seq(
@@ -41,10 +43,18 @@ object SbtServerPlugin extends Plugin {
     state
   }
 
-  lazy val mock = Command.args("mock", "<-m|-mock URI VALUE|RESOURCE_PATH>") { (state, args) =>
-    val keyValue = Try((args.head, args.tail.mkString(" "))).toOption
-    keyValue.foreach{case (k:String, v:String) => Resource.addMock(Mock(k,v))}
-    println(s"[SUCCESS]added mock ${args.head} to ${args.tail.mkString(" ")}")
+  lazy val mock = Command.args("mock", "<-a|-add> <URI> <VALUE|RESOURCE_PATH>") { (state, args) =>
+    args.head match {
+      case a if a.matches(ADD) =>
+        val keyValue = Try((args.head, args.tail.mkString(" "))).toOption
+        keyValue.foreach{case (k:String, v:String) => Resource.addMock(Mock(k,v))}
+        println(s"[SUCCESS]added mock ${args.head} to ${args.tail.mkString(" ")}")
+      case a if a.matches(LIST) =>
+        Resource.mockList.foreach(m => println(m.toString()))
+    }
+//    val keyValue = Try((args.head, args.tail.mkString(" "))).toOption
+//    keyValue.foreach{case (k:String, v:String) => Resource.addMock(Mock(k,v))}
+//    println(s"[SUCCESS]added mock ${args.head} to ${args.tail.mkString(" ")}")
     state
   }
 }
