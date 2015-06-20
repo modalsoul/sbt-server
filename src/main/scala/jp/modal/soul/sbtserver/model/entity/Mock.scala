@@ -10,8 +10,5 @@ import scala.util.Try
  * Created by imae on 2015/06/16.
  */
 case class Mock(path:String, src:String) {
-  def resource(charSet:String) = {
-    val file = Try(new File(src)).toOption.filter(_.isFile)
-    file.fold(src){ f => readFile(src, charSet) }
-  }
+  def resource = Try(new File(src)).toOption.filter(_.isFile).fold(src){f => readFile(src)}
 }
