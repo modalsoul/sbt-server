@@ -54,12 +54,15 @@ Use ```-b``` or ```-base``` parameter
     > server -base tmp
 
 ### mock task
+#### Add mock
 
-    > mock <URI> <RESPONSE|RESOURCE_FILE_PATH>
+    > mock -a <URI> <RESPONSE|RESOURCE_FILE_PATH>
+    or
+    > mock -add <URI> <RESPONSE|RESOURCE_FILE_PATH>
 
 You can add mock-up routing.
 
-For example, ```mock /api/foobar.json {"foo":"bar"}```
+For example, ```mock -a /api/foobar.json {"foo":"bar"}```
 
 `http://localhost:9000/api/foorbar.json`
 
@@ -79,7 +82,7 @@ For example, you have a file like this
 
 and use mock command
 
-```mock /api/users ./tmp/users.json```
+```mock -a /api/users ./tmp/users.json```
 
 `http://localhost:9000/api/users`
 
@@ -98,4 +101,19 @@ return
 ]
 ```
 
+#### List all mock
 
+    > mock -l
+    or
+    > mock -list
+
+You can show all mock
+
+For example,
+
+```
+/ : sbt-server is running.
+/fizz : buzz
+/foo : bar
+/hello/world : Hello world
+```

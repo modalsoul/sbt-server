@@ -17,5 +17,5 @@ object Resource {
   def setBaseDir(arg:String): Unit = baseDir = arg
   def addMock(mock:Mock):Unit = mocks(mock.path) = mock
   def get(target:String) = mocks.get(target).fold(readFile(path(target)))(_.resource)
-  def mockList = mocks.toList.sortWith((m1,m2) => m1._1 > m2._1)
+  def mockList = mocks.toList.sortWith((m1,m2) => m1._1 < m2._1)
 }

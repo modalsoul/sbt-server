@@ -28,6 +28,8 @@ object SbtServerPlugin extends Plugin {
     )
   )
 
+  Resource.addMock(Mock("/", "sbt-server is running."))
+
   lazy val sample = Command.command("hello") { state =>
     println("Hello SBT World!")
     state
@@ -38,7 +40,6 @@ object SbtServerPlugin extends Plugin {
     val port = withIndex.find(_._1.trim.matches(PORT)).flatMap{ case (p:String, i:Int) => Try(args(i+1).toInt).toOption }
     val baseDir = withIndex.find(_._1.trim.matches(BASE_DIR)).flatMap{ case (p:String, i:Int) => Try(args(i+1)).toOption }
     baseDir.foreach(Resource.setBaseDir)
-    Resource.addMock(Mock("/", "sbt-server is running."))
     Future(FinagleServer(port))
     state
   }
