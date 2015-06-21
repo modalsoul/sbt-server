@@ -113,7 +113,7 @@ For example,
 
 ```
 / : sbt-server is running.
-/fizz : buzz
-/foo : bar
+/api/foobar.json {"foo":"bar"}
+/api/users ./tmp/users.json
 /hello/world : Hello world
 ```
