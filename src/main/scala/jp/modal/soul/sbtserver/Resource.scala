@@ -12,7 +12,7 @@ object Resource {
   private[this] final val DEFAULT_BASE_DIR = "."
   private[this] var baseDir = DEFAULT_BASE_DIR
   private[this] val mocks = MutableMap.empty[String, Mock]
-  private[this] final val path = (target:String) => if(target.startsWith("./")) target else s"./$target"
+  private[this] final val path = (target:String) => if(target.startsWith("./")) target else s"$baseDir/$target"
 
   def setBaseDir(arg:String): Unit = baseDir = arg
   def addMock(mock:Mock):Unit = mocks(mock.path) = mock
