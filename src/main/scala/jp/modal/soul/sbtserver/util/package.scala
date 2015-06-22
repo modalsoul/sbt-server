@@ -15,7 +15,7 @@ package object util {
     } {
       var line = buffer.readLine()
       while (line != null) {
-        builder.append(line)
+        builder.append(s"$line\n")
         line = buffer.readLine()
       }
     }
